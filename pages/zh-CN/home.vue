@@ -17,7 +17,7 @@
           <section class="looper">
             <div v-swiper="announceSwiperOption">
               <div class="swiper-wrapper">
-                <div v-for="item in announces" :key="item.id" class="swiper-slide" @click="target(item.id)">
+                <div v-for="item in announces" :key="item.id" :data-index="item.id" class="swiper-slide">
                   <div class="cover">
                     <img :src="item.cover" />
                   </div>
@@ -28,7 +28,7 @@
           </section>
         </section>
       </section>
-      <section v-if="group1" class="news-block">
+      <section v-if="group1 && group1.items.length > 0" class="news-block">
         <div class="news-list">
           <dl>
             <dt class="block-title">
@@ -48,7 +48,7 @@
         </div>
       </section>
     </section>
-    <section v-if="group2" class="picnews-block">
+    <section v-if="group2 && group2.items.length > 0" class="picnews-block">
       <!-- <h3 class="block-title">
         <span class="name">{{ group2.title }}</span>
         <span class="more">
@@ -128,14 +128,25 @@ export default {
     return {
       wordIndex: 0,
       observer: null,
-      isProductLoading: false,
-      announceSwiperOption: {
-        autoplay: true,
-        loop: true
-      }
+      isProductLoading: false
     }
   },
   computed: {
+    announceSwiperOption() {
+      let that = this
+      let option = {
+        autoplay: true,
+        loop: true,
+        on: {
+          click() {
+            const realIndex = this.clickedSlide.dataset.index
+            const group = parseInt(this.clickedSlide.dataset.group)
+            that.target(realIndex, group)
+          }
+        }
+      }
+      return option
+    },
     swiperOption() {
       let that = this
       let option = {
@@ -170,22 +181,37 @@ export default {
       culture: state => state.app.culture,
       partners: state => state.app.partners,
       homePage: state => state.app.homePage
-    })
+    }),
+    groups() {
+      return this.homePage.groups ? this.homePage.groups.filter(x => x.catalogGroup) : []
+    },
+    blocks() {
+      return this.homePage.blocks ?? []
+    },
+    ad1() {
+      return this.blocks.length > 0 ? this.blocks[0] : null
+    },
+    ad2() {
+      return this.blocks.length > 1 ? this.blocks[1] : null
+    },
+    group1() {
+      let group1 = this.groups.length > 0 ? this.groups[0] : null
+      if (group1 && group1.items) group1.items = group1.items.slice(0, 6)
+      return group1
+    },
+    group2() {
+      let group2 = this.groups.length > 1 ? this.groups[1] : null
+      if (group2 && group2.items) group2.items = group2.items.slice(0, 6)
+      return group2
+    },
+    group3() {
+      let group3 = this.groups.length > 2 ? this.groups[2] : null
+      if (group3 && group3.items) group3.items = group3.items.slice(0, 6)
+      return group3
+    }
   },
   async asyncData({ isDev, route, store, env, query, req, res, redirect, error }) {
-    let params, group1, group2, group3, ad1, ad2, announces
-    const groups = store.state.app.homePage.groups.filter(x => x.catalogGroup)
-    const blocks = store.state.app.homePage.blocks
-
-    ad1 = blocks.length > 0 ? blocks[0] : null
-    ad2 = blocks.length > 1 ? blocks[1] : null
-    group1 = groups.length > 0 ? groups[0] : null
-    group2 = groups.length > 1 ? groups[1] : null
-    group3 = groups.length > 2 ? groups[2] : null
-    if (group1 && group1.items) group1.items = group1.items.slice(0, 6)
-    if (group2 && group2.items) group2.items = group2.items.slice(0, 6)
-    if (group3 && group3.items) group3.items = group3.items.slice(0, 6)
-
+    let params, announces
     params = {
       params: {
         SkipCount: 0,
@@ -193,10 +219,9 @@ export default {
       }
     }
     announces = (await store.dispatch('app/getAnounces', params)).items
-    return { ad1, ad2, announces, group1, group2, group3 }
+    return { announces }
   },
-  created() {
-  },
+  created() {},
   methods: {
     target(id) {
       window.open(`/${this.culture}/announce/detail/` + String(id, '_blank'))

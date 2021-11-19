@@ -17,7 +17,7 @@
           <div class="header-tools">
             <ul>
               <li>
-                <a href="javascript:void(0)">
+                <a :href="'tel:' + companyInfo.tel">
                   <i class="fas fa-phone-alt"></i>
                 </a>
               </li>
@@ -217,6 +217,7 @@ export default {
     context.store.dispatch('app/setCookie', language)
     await context.store.dispatch('app/getCompanyInfo')
     await context.store.dispatch('app/getNavbars')
+    await context.store.dispatch('app/getHomePage')
 
     return {
       name: 'Main',
@@ -231,6 +232,10 @@ export default {
   },
   mounted() {},
   methods: {
+    handleSwiperReadied(swiper) {},
+    closeNavbar() {
+      this.$refs.navbar.close()
+    },
     triggerNavbar() {
       this.$refs.navbar.trigger()
     },

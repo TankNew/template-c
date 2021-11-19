@@ -17,5 +17,4 @@ export default async function({ store, app, route, $config }, inject) {
   store.commit('app/setCulture', language)
   store.commit('app/setTenantId', tenantId)
   await store.dispatch('getAbp')
-  await store.dispatch('app/getHomePage')
 }

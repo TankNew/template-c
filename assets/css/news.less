@@ -51,17 +51,17 @@
       dd {
         margin-bottom: 1rem;
         a {
-          padding: .4rem 1.6rem;
+          padding: 0.4rem 1.6rem;
           display: block;
           margin-bottom: 0.1rem;
           position: relative;
           &::after {
             content: '';
             position: absolute;
-            top: calc(50% - .1rem);
+            top: calc(50% - 0.1rem);
             left: 0;
-            width: .8rem;
-            height: .8rem;
+            width: 0.8rem;
+            height: 0.8rem;
             transform: rotate(-45deg) translateY(-50%);
             border-bottom: 0.1rem solid @color-primary-lighter;
             border-right: 0.1rem solid @color-primary-lighter;
@@ -86,10 +86,10 @@
           &::after {
             content: '';
             position: absolute;
-            top: calc(50% - .1rem);
+            top: calc(50% - 0.1rem);
             left: 0;
-            width: .8rem;
-            height: .8rem;
+            width: 0.8rem;
+            height: 0.8rem;
             transform: rotate(-45deg) translateY(-50%);
             border-bottom: 0.1rem solid @color-primary-lighter;
             border-right: 0.1rem solid @color-primary-lighter;
@@ -245,5 +245,74 @@
   }
   .swiper-pagination-bullet-active {
     background: @color-primary !important;
+  }
+}
+.page-news-detail-container {
+  margin: 2rem auto;
+  padding-left: 0.6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  .page-news-detail-leftbar {
+    display: none;
+    @media @tablet {
+      display: block;
+      width: 20rem;
+      margin-top: 2rem;
+    }
+    dl {
+      margin-bottom: 4rem;
+      dt {
+        font-size: 1.6rem;
+        padding-bottom: 1rem;
+        color: @color-gray;
+        border-bottom: 1px solid @color-primary;
+        margin-bottom: 1rem;
+      }
+      dd {
+        margin: 0;
+        padding-left: 0;
+        a {
+          padding: 0.8rem 1.2rem;
+          display: block;
+          margin-bottom: 0.1rem;
+          font-size: 1.4rem;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          position: relative;
+          &::after {
+            content: '';
+            position: absolute;
+            top: calc(50% - 0.1rem);
+            left: 0;
+            width: 0.8rem;
+            height: 0.8rem;
+            transform: rotate(-45deg) translateY(-50%);
+            border-bottom: 0.1rem solid @color-primary-lighter;
+            border-right: 0.1rem solid @color-primary-lighter;
+          }
+        }
+      }
+    }
+  }
+  .page-news-detail-content {
+    width: 100%;
+
+    @media @tablet {
+      display: block;
+      width: calc(100% - 20rem);
+    }
+
+    .page-detail-title {
+      margin-top: 0;
+      font-size: 1.6rem;
+
+      @media @tablet {
+      font-size: 1.8rem;
+    }
+    }
   }
 }
